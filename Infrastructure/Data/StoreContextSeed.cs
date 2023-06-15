@@ -30,6 +30,20 @@ namespace Infrastructure.Data
                 context.Products.AddRange(products);
             }
 
+            if (!context.RoleTypes.Any())
+            {
+                var rolesData = File.ReadAllText("../Infrastructure/Data/SeedData/roles.json");
+                var roles = JsonSerializer.Deserialize<List<RoleType>>(rolesData);
+                context.RoleTypes.AddRange(roles);
+            }
+
+            if (!context.Users.Any())
+            {
+                var usersData = File.ReadAllText("../Infrastructure/Data/SeedData/users.json");
+                var users = JsonSerializer.Deserialize<List<User>>(usersData);
+                context.Users.AddRange(users);
+            }
+
             if (context.ChangeTracker.HasChanges()) await context.SaveChangesAsync();
         }
     }
