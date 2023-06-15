@@ -9,6 +9,20 @@ namespace Infrastructure.Data
     {
         public static async Task SeedAsync(StoreContext context)
         {
+
+            if (!context.RoleTypes.Any())
+            {
+                var rolesData = File.ReadAllText("../Infrastructure/Data/SeedData/roles.json");
+                var roles = JsonSerializer.Deserialize<List<RoleType>>(rolesData);
+                context.RoleTypes.AddRange(roles);
+            }
+
+            if (!context.Users.Any())
+            {
+                var usersData = File.ReadAllText("../Infrastructure/Data/SeedData/user.json");
+                var users = JsonSerializer.Deserialize<List<User>>(usersData);
+                context.Users.AddRange(users);
+            }
             if (!context.ProductBrands.Any())
             {
                 var brandsData = File.ReadAllText("../Infrastructure/Data/SeedData/brands.json");
@@ -28,20 +42,6 @@ namespace Infrastructure.Data
                 var productsData = File.ReadAllText("../Infrastructure/Data/SeedData/products.json");
                 var products = JsonSerializer.Deserialize<List<Product>>(productsData);
                 context.Products.AddRange(products);
-            }
-
-            if (!context.RoleTypes.Any())
-            {
-                var rolesData = File.ReadAllText("../Infrastructure/Data/SeedData/roles.json");
-                var roles = JsonSerializer.Deserialize<List<RoleType>>(rolesData);
-                context.RoleTypes.AddRange(roles);
-            }
-
-            if (!context.Users.Any())
-            {
-                var usersData = File.ReadAllText("../Infrastructure/Data/SeedData/users.json");
-                var users = JsonSerializer.Deserialize<List<User>>(usersData);
-                context.Users.AddRange(users);
             }
 
             if (context.ChangeTracker.HasChanges()) await context.SaveChangesAsync();
